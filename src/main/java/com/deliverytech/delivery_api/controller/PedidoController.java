@@ -35,15 +35,15 @@ public class PedidoController {
 		return pedidoService.listarPorCliente(clienteId);
 	}
 
-	@GetMapping("/pedidos")
-	public List<Pedido> listar(
-			@RequestParam(value = "status", required = false) String status,
-			@RequestParam(value = "inicio", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
-			@RequestParam(value = "fim", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim) {
-		if (status != null) return pedidoService.listarPorStatus(status);
-		if (inicio != null && fim != null) return pedidoService.listarPorPeriodo(inicio, fim);
-		return List.of();
-	}
+    @GetMapping("/pedidos")
+    public List<Pedido> listar(
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "inicio", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
+            @RequestParam(value = "fim", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim) {
+        if (status != null) return pedidoService.listarPorStatus(status);
+        if (inicio != null && fim != null) return pedidoService.listarPorPeriodo(inicio, fim);
+        return pedidoService.listarTodos();
+    }
 
 	@PutMapping("/pedidos/{id}/status")
 	public Pedido atualizarStatus(@PathVariable Long id, @RequestParam String status) {

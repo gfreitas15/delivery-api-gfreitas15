@@ -31,13 +31,14 @@ public class ProdutoController {
 		return produtoService.listarPorRestaurante(restauranteId);
 	}
 
-	@GetMapping("/produtos")
-	public List<Produto> listarPorCategoria(@RequestParam(value = "categoria", required = false) String categoria,
-	                                       @RequestParam(value = "disponivel", required = false) Boolean disponivel) {
-		if (categoria != null && Boolean.TRUE.equals(disponivel)) return produtoService.listarPorCategoria(categoria); // simples
-		if (categoria != null) return produtoService.listarPorCategoria(categoria);
-		return produtoService.listarPorCategoria("");
-	}
+    @GetMapping("/produtos")
+    public List<Produto> listarProdutos(@RequestParam(value = "categoria", required = false) String categoria,
+                                        @RequestParam(value = "disponivel", required = false) Boolean disponivel) {
+        if (categoria != null && Boolean.TRUE.equals(disponivel)) return produtoService.listarDisponiveisPorCategoria(categoria);
+        if (categoria != null) return produtoService.listarPorCategoria(categoria);
+        if (Boolean.TRUE.equals(disponivel)) return produtoService.listarDisponiveis();
+        return produtoService.listarTodos();
+    }
 
 	@PutMapping("/produtos/{id}")
 	public Produto atualizar(@PathVariable Long id, @RequestBody Produto produto) {
