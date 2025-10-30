@@ -1,0 +1,119 @@
+{
+  "info": {
+    "name": "Delivery API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "delivery-api-collection"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {"method": "GET", "url": "http://localhost:8080/health"}
+        },
+        {
+          "name": "GET /info",
+          "request": {"method": "GET", "url": "http://localhost:8080/info"}
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "POST /clientes",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Novo Cliente\",\n  \"email\": \"novo@delivery.com\"\n}"},
+            "url": "http://localhost:8080/clientes"
+          }
+        },
+        {"name": "GET /clientes", "request": {"method": "GET", "url": "http://localhost:8080/clientes"}},
+        {"name": "GET /clientes/ativos", "request": {"method": "GET", "url": "http://localhost:8080/clientes/ativos"}},
+        {"name": "GET /clientes/{id}", "request": {"method": "GET", "url": "http://localhost:8080/clientes/1"}},
+        {
+          "name": "PUT /clientes/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Cliente Atualizado\",\n  \"email\": \"ana@delivery.com\"\n}"},
+            "url": "http://localhost:8080/clientes/1"
+          }
+        },
+        {"name": "DELETE /clientes/{id}", "request": {"method": "DELETE", "url": "http://localhost:8080/clientes/1"}}
+      ]
+    },
+    {
+      "name": "Restaurantes",
+      "item": [
+        {
+          "name": "POST /restaurantes",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Novo Restaurante\",\n  \"categoria\": \"Japonesa\"\n}"},
+            "url": "http://localhost:8080/restaurantes"
+          }
+        },
+        {"name": "GET /restaurantes", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes"}},
+        {"name": "GET /restaurantes?categoria=Italiana", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes?categoria=Italiana"}},
+        {"name": "GET /restaurantes?ativos=true", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes?ativos=true"}},
+        {"name": "GET /restaurantes/top-avaliacao", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/top-avaliacao"}},
+        {"name": "GET /restaurantes/{id}", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/1"}},
+        {
+          "name": "PUT /restaurantes/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Sabor Caseiro Premium\",\n  \"categoria\": \"Brasileira\",\n  \"avaliacao\": 4.7\n}"},
+            "url": "http://localhost:8080/restaurantes/1"
+          }
+        },
+        {"name": "POST /restaurantes/{id}/ativar", "request": {"method": "POST", "url": "http://localhost:8080/restaurantes/1/ativar"}},
+        {"name": "POST /restaurantes/{id}/inativar", "request": {"method": "POST", "url": "http://localhost:8080/restaurantes/1/inativar"}},
+        {"name": "DELETE /restaurantes/{id}", "request": {"method": "DELETE", "url": "http://localhost:8080/restaurantes/3"}}
+      ]
+    },
+    {
+      "name": "Produtos",
+      "item": [
+        {
+          "name": "POST /restaurantes/{id}/produtos",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Hossomaki\",\n  \"preco\": 24.90,\n  \"categoria\": \"Sushi\"\n}"},
+            "url": "http://localhost:8080/restaurantes/2/produtos"
+          }
+        },
+        {"name": "GET /restaurantes/{id}/produtos", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/2/produtos"}},
+        {"name": "GET /restaurantes/{id}/produtos?disponivel=true", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/2/produtos?disponivel=true"}},
+        {"name": "PUT /produtos/{id}", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Hossomaki Salmão\",\n  \"preco\": 26.90,\n  \"categoria\": \"Sushi\",\n  \"disponivel\": true\n}"}, "url": "http://localhost:8080/produtos/2"}},
+        {"name": "DELETE /produtos/{id}", "request": {"method": "DELETE", "url": "http://localhost:8080/produtos/2"}}
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "POST /pedidos?clienteId=1",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"status\": \"PENDENTE\",\n  \"valorSubtotal\": 89.90,\n  \"valorEntrega\": 7.90\n}"},
+            "url": "http://localhost:8080/pedidos?clienteId=1"
+          }
+        },
+        {"name": "GET /pedidos/{id}", "request": {"method": "GET", "url": "http://localhost:8080/pedidos/1"}},
+        {"name": "GET /clientes/{id}/pedidos", "request": {"method": "GET", "url": "http://localhost:8080/clientes/1/pedidos"}},
+        {"name": "GET /pedidos?status=PENDENTE", "request": {"method": "GET", "url": "http://localhost:8080/pedidos?status=PENDENTE"}},
+        {"name": "GET /pedidos?inicio=YYYY-MM-DD&fim=YYYY-MM-DD", "request": {"method": "GET", "url": "http://localhost:8080/pedidos?inicio=2024-01-01&fim=2030-12-31"}},
+        {"name": "PUT /pedidos/{id}/status", "request": {"method": "PUT", "url": "http://localhost:8080/pedidos/1/status?status=EM_PREPARO"}}
+      ]
+    }
+  ]
+}
+
+
