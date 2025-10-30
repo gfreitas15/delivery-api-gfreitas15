@@ -58,6 +58,10 @@ public class PedidoService {
 		return pedidoRepository.findByDataPedidoBetween(inicio, fim);
 	}
 
+	public List<Pedido> listarTodos() {
+		return pedidoRepository.findAll();
+	}
+
 	@Transactional
 	public Pedido atualizarStatus(Long id, String novoStatus) {
 		Pedido pedido = buscarPorId(id);

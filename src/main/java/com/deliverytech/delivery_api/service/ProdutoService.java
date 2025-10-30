@@ -45,6 +45,18 @@ public class ProdutoService {
 		return produtoRepository.findByCategoria(categoria);
 	}
 
+	public List<Produto> listarDisponiveis() {
+		return produtoRepository.findByDisponivelTrue();
+	}
+
+	public List<Produto> listarDisponiveisPorCategoria(String categoria) {
+		return produtoRepository.findByCategoriaAndDisponivelTrue(categoria);
+	}
+
+	public List<Produto> listarTodos() {
+		return produtoRepository.findAll();
+	}
+
 	@Transactional
 	public Produto atualizar(Long id, Produto dados) {
 		Produto existente = produtoRepository.findById(id)
