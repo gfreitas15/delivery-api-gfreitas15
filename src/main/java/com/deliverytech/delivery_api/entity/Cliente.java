@@ -21,6 +21,12 @@ public class Cliente {
 	@Column(nullable = false, unique = true)
 	private String email;
 
+	@Column(length = 20)
+	private String telefone;
+
+	@Column(length = 255)
+	private String endereco;
+
 	@Column(nullable = false)
 	private boolean ativo = true;
 
@@ -56,6 +62,22 @@ public class Cliente {
 
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 }
 

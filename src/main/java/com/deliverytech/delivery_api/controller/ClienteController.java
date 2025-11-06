@@ -1,7 +1,10 @@
 package com.deliverytech.delivery_api.controller;
 
-import com.deliverytech.delivery_api.entity.Cliente;
+import com.deliverytech.delivery_api.dto.ClienteDTO;
+import com.deliverytech.delivery_api.dto.ClienteResponseDTO;
 import com.deliverytech.delivery_api.service.ClienteService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
 	private final ClienteService clienteService;
@@ -19,35 +22,41 @@ public class ClienteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente) {
-		Cliente salvo = clienteService.criar(cliente);
-		return ResponseEntity.created(URI.create("/clientes/" + salvo.getId())).body(salvo);
-	}
-
-	@GetMapping
-	public List<Cliente> listar() {
-		return clienteService.listarTodos();
-	}
-
-	@GetMapping("/ativos")
-	public List<Cliente> listarAtivos() {
-		return clienteService.listarAtivos();
+	public ResponseEntity<ClienteResponseDTO> cadastrar(@Valid @RequestBody ClienteDTO dto) {
+		ClienteResponseDTO response = clienteService.cadastrarCliente(dto);
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.location(URI.create("/api/clientes/" + response.getId()))
+			.body(response);
 	}
 
 	@GetMapping("/{id}")
-	public Cliente buscar(@PathVariable Long id) {
-		return clienteService.buscarPorId(id);
+	public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
+		ClienteResponseDTO response = clienteService.buscarClientePorId(id);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<ClienteResponseDTO>> listarAtivos() {
+		List<ClienteResponseDTO> response = clienteService.listarClientesAtivos();
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/{id}")
-	public Cliente atualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
-		return clienteService.atualizar(id, cliente);
+	public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteDTO dto) {
+		ClienteResponseDTO response = clienteService.atualizarCliente(id, dto);
+		return ResponseEntity.ok(response);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> inativar(@PathVariable Long id) {
-		clienteService.inativar(id);
+	@PatchMapping("/{id}/status")
+	public ResponseEntity<Void> ativarDesativar(@PathVariable Long id) {
+		clienteService.ativarDesativarCliente(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/email/{email}")
+	public ResponseEntity<ClienteResponseDTO> buscarPorEmail(@PathVariable String email) {
+		ClienteResponseDTO response = clienteService.buscarClientePorEmail(email);
+		return ResponseEntity.ok(response);
 	}
 }
 

@@ -1,15 +1,19 @@
 package com.deliverytech.delivery_api.controller;
 
-import com.deliverytech.delivery_api.entity.Restaurante;
+import com.deliverytech.delivery_api.dto.RestauranteDTO;
+import com.deliverytech.delivery_api.dto.RestauranteResponseDTO;
 import com.deliverytech.delivery_api.service.RestauranteService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurantes")
+@RequestMapping("/api/restaurantes")
 public class RestauranteController {
 
 	private final RestauranteService restauranteService;
@@ -19,50 +23,41 @@ public class RestauranteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Restaurante> criar(@RequestBody Restaurante restaurante) {
-		Restaurante salvo = restauranteService.criar(restaurante);
-		return ResponseEntity.created(URI.create("/restaurantes/" + salvo.getId())).body(salvo);
-	}
-
-	@GetMapping
-	public List<Restaurante> listar(@RequestParam(value = "categoria", required = false) String categoria,
-	                               @RequestParam(value = "ativos", required = false) Boolean ativos) {
-		if (categoria != null) return restauranteService.buscarPorCategoria(categoria);
-		if (Boolean.TRUE.equals(ativos)) return restauranteService.listarAtivos();
-		return restauranteService.listarTodos();
-	}
-
-	@GetMapping("/top-avaliacao")
-	public List<Restaurante> topAvaliacao() {
-		return restauranteService.topAvaliacao(10);
+	public ResponseEntity<RestauranteResponseDTO> cadastrar(@Valid @RequestBody RestauranteDTO dto) {
+		RestauranteResponseDTO response = restauranteService.cadastrarRestaurante(dto);
+		return ResponseEntity.status(HttpStatus.CREATED)
+			.location(URI.create("/api/restaurantes/" + response.getId()))
+			.body(response);
 	}
 
 	@GetMapping("/{id}")
-	public Restaurante buscar(@PathVariable Long id) {
-		return restauranteService.buscarPorId(id);
+	public ResponseEntity<RestauranteResponseDTO> buscarPorId(@PathVariable Long id) {
+		RestauranteResponseDTO response = restauranteService.buscarRestaurantePorId(id);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<RestauranteResponseDTO>> listarDisponiveis() {
+		List<RestauranteResponseDTO> response = restauranteService.buscarRestaurantesDisponiveis();
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/categoria/{categoria}")
+	public ResponseEntity<List<RestauranteResponseDTO>> buscarPorCategoria(@PathVariable String categoria) {
+		List<RestauranteResponseDTO> response = restauranteService.buscarRestaurantesPorCategoria(categoria);
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/{id}")
-	public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
-		return restauranteService.atualizar(id, restaurante);
+	public ResponseEntity<RestauranteResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody RestauranteDTO dto) {
+		RestauranteResponseDTO response = restauranteService.atualizarRestaurante(id, dto);
+		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/{id}/ativar")
-	public ResponseEntity<Void> ativar(@PathVariable Long id) {
-		restauranteService.ativar(id);
-		return ResponseEntity.noContent().build();
-	}
-
-	@PostMapping("/{id}/inativar")
-	public ResponseEntity<Void> inativar(@PathVariable Long id) {
-		restauranteService.inativar(id);
-		return ResponseEntity.noContent().build();
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		restauranteService.deletar(id);
-		return ResponseEntity.noContent().build();
+	@GetMapping("/{id}/taxa-entrega/{cep}")
+	public ResponseEntity<BigDecimal> calcularTaxaEntrega(@PathVariable Long id, @PathVariable String cep) {
+		BigDecimal taxa = restauranteService.calcularTaxaEntrega(id, cep);
+		return ResponseEntity.ok(taxa);
 	}
 }
 

@@ -27,6 +27,9 @@ public class Pedido {
 	@Column(nullable = false)
 	private String status;
 
+	@Column(name = "endereco_entrega", length = 255)
+	private String enderecoEntrega;
+
 	@Column(name = "data_pedido", nullable = false)
 	private LocalDateTime dataPedido;
 
@@ -102,6 +105,14 @@ public class Pedido {
 
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
+	}
+
+	public String getEnderecoEntrega() {
+		return enderecoEntrega;
+	}
+
+	public void setEnderecoEntrega(String enderecoEntrega) {
+		this.enderecoEntrega = enderecoEntrega;
 	}
 }
 

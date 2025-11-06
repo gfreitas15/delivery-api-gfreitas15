@@ -1,8 +1,9 @@
 {
   "info": {
-    "name": "Delivery API",
+    "name": "Delivery API - Roteiro 4",
+    "description": "Collection completa da API DeliveryTech com todos os endpoints REST",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "delivery-api-collection"
+    "_postman_id": "delivery-api-roteiro-4"
   },
   "item": [
     {
@@ -10,11 +11,31 @@
       "item": [
         {
           "name": "GET /health",
-          "request": {"method": "GET", "url": "http://localhost:8080/health"}
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["health"]
+            }
+          }
         },
         {
           "name": "GET /info",
-          "request": {"method": "GET", "url": "http://localhost:8080/info"}
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/info",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["info"]
+            }
+          }
         }
       ]
     },
@@ -22,98 +43,454 @@
       "name": "Clientes",
       "item": [
         {
-          "name": "POST /clientes",
+          "name": "POST /api/clientes - Cadastrar Cliente",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Novo Cliente\",\n  \"email\": \"novo@delivery.com\"\n}"},
-            "url": "http://localhost:8080/clientes"
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@email.com\",\n  \"telefone\": \"11999999999\",\n  \"endereco\": \"Rua A, 123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/clientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "clientes"]
+            }
           }
         },
-        {"name": "GET /clientes", "request": {"method": "GET", "url": "http://localhost:8080/clientes"}},
-        {"name": "GET /clientes/ativos", "request": {"method": "GET", "url": "http://localhost:8080/clientes/ativos"}},
-        {"name": "GET /clientes/{id}", "request": {"method": "GET", "url": "http://localhost:8080/clientes/1"}},
         {
-          "name": "PUT /clientes/{id}",
+          "name": "GET /api/clientes - Listar Ativos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/clientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/clientes/{id} - Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/clientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "clientes", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/clientes/email/{email} - Buscar por Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/clientes/email/joao@email.com",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "clientes", "email", "joao@email.com"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/clientes/{id} - Atualizar Cliente",
           "request": {
             "method": "PUT",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Cliente Atualizado\",\n  \"email\": \"ana@delivery.com\"\n}"},
-            "url": "http://localhost:8080/clientes/1"
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João Silva Atualizado\",\n  \"email\": \"joao@email.com\",\n  \"telefone\": \"11988888888\",\n  \"endereco\": \"Rua B, 456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/clientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "clientes", "1"]
+            }
           }
         },
-        {"name": "DELETE /clientes/{id}", "request": {"method": "DELETE", "url": "http://localhost:8080/clientes/1"}}
+        {
+          "name": "PATCH /api/clientes/{id}/status - Ativar/Desativar",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/clientes/1/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "clientes", "1", "status"]
+            }
+          }
+        }
       ]
     },
     {
       "name": "Restaurantes",
       "item": [
         {
-          "name": "POST /restaurantes",
+          "name": "POST /api/restaurantes - Cadastrar Restaurante",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Novo Restaurante\",\n  \"categoria\": \"Japonesa\"\n}"},
-            "url": "http://localhost:8080/restaurantes"
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Sabor Caseiro\",\n  \"categoria\": \"Brasileira\",\n  \"taxaEntrega\": 5.00,\n  \"avaliacao\": 4.5\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/restaurantes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "restaurantes"]
+            }
           }
         },
-        {"name": "GET /restaurantes", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes"}},
-        {"name": "GET /restaurantes?categoria=Italiana", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes?categoria=Italiana"}},
-        {"name": "GET /restaurantes?ativos=true", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes?ativos=true"}},
-        {"name": "GET /restaurantes/top-avaliacao", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/top-avaliacao"}},
-        {"name": "GET /restaurantes/{id}", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/1"}},
         {
-          "name": "PUT /restaurantes/{id}",
+          "name": "GET /api/restaurantes - Listar Disponíveis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/restaurantes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "restaurantes"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/restaurantes/{id} - Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/restaurantes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "restaurantes", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/restaurantes/categoria/{categoria} - Por Categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/restaurantes/categoria/Pizza",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "restaurantes", "categoria", "Pizza"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/restaurantes/{id} - Atualizar Restaurante",
           "request": {
             "method": "PUT",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Sabor Caseiro Premium\",\n  \"categoria\": \"Brasileira\",\n  \"avaliacao\": 4.7\n}"},
-            "url": "http://localhost:8080/restaurantes/1"
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Sabor Caseiro Premium\",\n  \"categoria\": \"Brasileira\",\n  \"taxaEntrega\": 6.00,\n  \"avaliacao\": 4.7\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/restaurantes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "restaurantes", "1"]
+            }
           }
         },
-        {"name": "POST /restaurantes/{id}/ativar", "request": {"method": "POST", "url": "http://localhost:8080/restaurantes/1/ativar"}},
-        {"name": "POST /restaurantes/{id}/inativar", "request": {"method": "POST", "url": "http://localhost:8080/restaurantes/1/inativar"}},
-        {"name": "DELETE /restaurantes/{id}", "request": {"method": "DELETE", "url": "http://localhost:8080/restaurantes/3"}}
+        {
+          "name": "GET /api/restaurantes/{id}/taxa-entrega/{cep} - Calcular Taxa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/restaurantes/1/taxa-entrega/01310100",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "restaurantes", "1", "taxa-entrega", "01310100"]
+            }
+          }
+        }
       ]
     },
     {
       "name": "Produtos",
       "item": [
         {
-          "name": "POST /restaurantes/{id}/produtos",
+          "name": "POST /api/produtos - Cadastrar Produto",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Hossomaki\",\n  \"preco\": 24.90,\n  \"categoria\": \"Sushi\"\n}"},
-            "url": "http://localhost:8080/restaurantes/2/produtos"
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Pizza Margherita\",\n  \"preco\": 35.00,\n  \"categoria\": \"Pizza\",\n  \"restauranteId\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/produtos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "produtos"]
+            }
           }
         },
-        {"name": "GET /restaurantes/{id}/produtos", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/2/produtos"}},
-        {"name": "GET /restaurantes/{id}/produtos?disponivel=true", "request": {"method": "GET", "url": "http://localhost:8080/restaurantes/2/produtos?disponivel=true"}},
-        {"name": "PUT /produtos/{id}", "request": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\n  \"nome\": \"Hossomaki Salmão\",\n  \"preco\": 26.90,\n  \"categoria\": \"Sushi\",\n  \"disponivel\": true\n}"}, "url": "http://localhost:8080/produtos/2"}},
-        {"name": "DELETE /produtos/{id}", "request": {"method": "DELETE", "url": "http://localhost:8080/produtos/2"}}
+        {
+          "name": "GET /api/produtos/{id} - Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/produtos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "produtos", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/restaurantes/{restauranteId}/produtos - Produtos do Restaurante",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/restaurantes/1/produtos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "restaurantes", "1", "produtos"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/produtos/{id} - Atualizar Produto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Pizza Margherita Grande\",\n  \"preco\": 42.00,\n  \"categoria\": \"Pizza\",\n  \"restauranteId\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/produtos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "produtos", "1"]
+            }
+          }
+        },
+        {
+          "name": "PATCH /api/produtos/{id}/disponibilidade - Alterar Disponibilidade",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"disponivel\": false\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/produtos/1/disponibilidade",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "produtos", "1", "disponibilidade"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/produtos/categoria/{categoria} - Por Categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/produtos/categoria/Pizza",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "produtos", "categoria", "Pizza"]
+            }
+          }
+        }
       ]
     },
     {
       "name": "Pedidos",
       "item": [
         {
-          "name": "POST /pedidos?clienteId=1",
+          "name": "POST /api/pedidos - Criar Pedido Completo",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {"mode": "raw", "raw": "{\n  \"status\": \"PENDENTE\",\n  \"valorSubtotal\": 89.90,\n  \"valorEntrega\": 7.90\n}"},
-            "url": "http://localhost:8080/pedidos?clienteId=1"
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 1,\n  \"restauranteId\": 1,\n  \"enderecoEntrega\": \"Rua B, 456\",\n  \"itens\": [\n    {\n      \"produtoId\": 1,\n      \"quantidade\": 2\n    },\n    {\n      \"produtoId\": 2,\n      \"quantidade\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/pedidos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "pedidos"]
+            }
           }
         },
-        {"name": "GET /pedidos/{id}", "request": {"method": "GET", "url": "http://localhost:8080/pedidos/1"}},
-        {"name": "GET /clientes/{id}/pedidos", "request": {"method": "GET", "url": "http://localhost:8080/clientes/1/pedidos"}},
-        {"name": "GET /pedidos?status=PENDENTE", "request": {"method": "GET", "url": "http://localhost:8080/pedidos?status=PENDENTE"}},
-        {"name": "GET /pedidos?inicio=YYYY-MM-DD&fim=YYYY-MM-DD", "request": {"method": "GET", "url": "http://localhost:8080/pedidos?inicio=2024-01-01&fim=2030-12-31"}},
-        {"name": "PUT /pedidos/{id}/status", "request": {"method": "PUT", "url": "http://localhost:8080/pedidos/1/status?status=EM_PREPARO"}}
+        {
+          "name": "GET /api/pedidos/{id} - Buscar Pedido Completo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/pedidos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "pedidos", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET /api/clientes/{clienteId}/pedidos - Histórico do Cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/clientes/1/pedidos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "clientes", "1", "pedidos"]
+            }
+          }
+        },
+        {
+          "name": "PATCH /api/pedidos/{id}/status - Atualizar Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMADO\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/pedidos/1/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "pedidos", "1", "status"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/pedidos/{id} - Cancelar Pedido",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/pedidos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "pedidos", "1"]
+            }
+          }
+        },
+        {
+          "name": "POST /api/pedidos/calcular - Calcular Total",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"produtoId\": 1,\n    \"quantidade\": 2\n  },\n  {\n    \"produtoId\": 2,\n    \"quantidade\": 1\n  }\n]"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/pedidos/calcular",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "pedidos", "calcular"]
+            }
+          }
+        }
       ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
     }
   ]
 }
-
-

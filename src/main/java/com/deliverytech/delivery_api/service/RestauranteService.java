@@ -1,85 +1,98 @@
 package com.deliverytech.delivery_api.service;
 
+import com.deliverytech.delivery_api.dto.RestauranteDTO;
+import com.deliverytech.delivery_api.dto.RestauranteResponseDTO;
 import com.deliverytech.delivery_api.entity.Restaurante;
+import com.deliverytech.delivery_api.exception.EntityNotFoundException;
 import com.deliverytech.delivery_api.repository.RestauranteRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RestauranteService {
 
 	private final RestauranteRepository restauranteRepository;
+	private final ModelMapper modelMapper;
 
-	public RestauranteService(RestauranteRepository restauranteRepository) {
+	public RestauranteService(RestauranteRepository restauranteRepository, ModelMapper modelMapper) {
 		this.restauranteRepository = restauranteRepository;
+		this.modelMapper = modelMapper;
 	}
 
 	@Transactional
-	public Restaurante criar(Restaurante restaurante) {
+	public RestauranteResponseDTO cadastrarRestaurante(RestauranteDTO dto) {
+		Restaurante restaurante = modelMapper.map(dto, Restaurante.class);
 		restaurante.setAtivo(true);
-		return restauranteRepository.save(restaurante);
+		Restaurante salvo = restauranteRepository.save(restaurante);
+		return modelMapper.map(salvo, RestauranteResponseDTO.class);
 	}
 
-	public List<Restaurante> listarTodos() {
-		return restauranteRepository.findAll();
+	public RestauranteResponseDTO buscarRestaurantePorId(Long id) {
+		Restaurante restaurante = restauranteRepository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado com ID: " + id));
+		return modelMapper.map(restaurante, RestauranteResponseDTO.class);
 	}
 
-	public Restaurante buscarPorId(Long id) {
-		return restauranteRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("Restaurante não encontrado"));
+	public List<RestauranteResponseDTO> buscarRestaurantesPorCategoria(String categoria) {
+		return restauranteRepository.findByCategoria(categoria).stream()
+			.map(restaurante -> modelMapper.map(restaurante, RestauranteResponseDTO.class))
+			.collect(Collectors.toList());
 	}
 
-	@Transactional
-	public Restaurante atualizar(Long id, Restaurante dados) {
-		Restaurante existente = buscarPorId(id);
-		existente.setNome(dados.getNome());
-		existente.setCategoria(dados.getCategoria());
-		existente.setAvaliacao(dados.getAvaliacao());
-		existente.setTaxaEntrega(dados.getTaxaEntrega());
-		return restauranteRepository.save(existente);
-	}
-
-	@Transactional
-	public void ativar(Long id) {
-		Restaurante existente = buscarPorId(id);
-		existente.setAtivo(true);
-		restauranteRepository.save(existente);
+	public List<RestauranteResponseDTO> buscarRestaurantesDisponiveis() {
+		return restauranteRepository.findByAtivoTrue().stream()
+			.map(restaurante -> modelMapper.map(restaurante, RestauranteResponseDTO.class))
+			.collect(Collectors.toList());
 	}
 
 	@Transactional
-	public void inativar(Long id) {
-		Restaurante existente = buscarPorId(id);
-		existente.setAtivo(false);
-		restauranteRepository.save(existente);
+	public RestauranteResponseDTO atualizarRestaurante(Long id, RestauranteDTO dto) {
+		Restaurante existente = restauranteRepository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado com ID: " + id));
+		
+		existente.setNome(dto.getNome());
+		existente.setCategoria(dto.getCategoria());
+		existente.setTaxaEntrega(dto.getTaxaEntrega());
+		if (dto.getAvaliacao() != null) {
+			existente.setAvaliacao(dto.getAvaliacao());
+		}
+		
+		Restaurante atualizado = restauranteRepository.save(existente);
+		return modelMapper.map(atualizado, RestauranteResponseDTO.class);
 	}
 
-	public List<Restaurante> buscarPorCategoria(String categoria) {
-		return restauranteRepository.findByCategoria(categoria);
+	public BigDecimal calcularTaxaEntrega(Long restauranteId, String cep) {
+		Restaurante restaurante = restauranteRepository.findById(restauranteId)
+			.orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado com ID: " + restauranteId));
+		
+		if (!restaurante.isAtivo()) {
+			throw new IllegalArgumentException("Restaurante não está disponível");
+		}
+		
+		BigDecimal taxaBase = restaurante.getTaxaEntrega();
+		
+		if (cep == null || cep.isEmpty()) {
+			return taxaBase;
+		}
+		
+		String cepSemFormatacao = cep.replaceAll("[^0-9]", "");
+		
+		if (cepSemFormatacao.length() != 8) {
+			return taxaBase;
+		}
+		
+		return taxaBase;
 	}
 
-	public List<Restaurante> listarAtivos() {
-		return restauranteRepository.findByAtivoTrue();
-	}
-
-	public List<Restaurante> topAvaliacao(int limit) {
-		List<Restaurante> todos = restauranteRepository.findAll();
-		return todos.stream()
-			.sorted((a, b) -> {
-				if (a.getAvaliacao() == null && b.getAvaliacao() == null) return 0;
-				if (a.getAvaliacao() == null) return 1;
-				if (b.getAvaliacao() == null) return -1;
-				return b.getAvaliacao().compareTo(a.getAvaliacao());
-			})
-			.limit(limit > 0 ? limit : todos.size())
-			.toList();
-	}
-
-	@Transactional
-	public void deletar(Long id) {
-		Restaurante existente = buscarPorId(id);
-		restauranteRepository.delete(existente);
+	public List<RestauranteResponseDTO> listarTodos() {
+		return restauranteRepository.findAll().stream()
+			.map(restaurante -> modelMapper.map(restaurante, RestauranteResponseDTO.class))
+			.collect(Collectors.toList());
 	}
 }
 
