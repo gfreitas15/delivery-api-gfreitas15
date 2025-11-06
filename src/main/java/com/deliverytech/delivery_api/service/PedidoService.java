@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -54,7 +54,7 @@ public class PedidoService {
 		return pedidoRepository.findByStatus(status);
 	}
 
-	public List<Pedido> listarPorPeriodo(LocalDate inicio, LocalDate fim) {
+	public List<Pedido> listarPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
 		return pedidoRepository.findByDataPedidoBetween(inicio, fim);
 	}
 

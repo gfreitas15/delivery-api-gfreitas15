@@ -26,7 +26,10 @@ public class Restaurante {
 	private boolean ativo = true;
 
 	@Column(precision = 3, scale = 2)
-	private BigDecimal avaliacao; // 0.00 a 5.00
+	private BigDecimal avaliacao;
+
+	@Column(name = "taxa_entrega", nullable = false, precision = 10, scale = 2)
+	private BigDecimal taxaEntrega = BigDecimal.ZERO;
 
 	public Restaurante() {}
 
@@ -68,6 +71,14 @@ public class Restaurante {
 
 	public void setAvaliacao(BigDecimal avaliacao) {
 		this.avaliacao = avaliacao;
+	}
+
+	public BigDecimal getTaxaEntrega() {
+		return taxaEntrega;
+	}
+
+	public void setTaxaEntrega(BigDecimal taxaEntrega) {
+		this.taxaEntrega = taxaEntrega;
 	}
 }
 

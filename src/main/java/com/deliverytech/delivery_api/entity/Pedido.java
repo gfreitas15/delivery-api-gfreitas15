@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pedidos")
@@ -25,10 +25,10 @@ public class Pedido {
 	private Cliente cliente;
 
 	@Column(nullable = false)
-	private String status; // PENDENTE, EM_PREPARO, SAIU_ENTREGA, ENTREGUE, CANCELADO
+	private String status;
 
 	@Column(name = "data_pedido", nullable = false)
-	private LocalDate dataPedido;
+	private LocalDateTime dataPedido;
 
 	@Column(name = "valor_subtotal", nullable = false)
 	private BigDecimal valorSubtotal = BigDecimal.ZERO;
@@ -44,7 +44,7 @@ public class Pedido {
 	@PrePersist
 	public void prePersist() {
 		if (dataPedido == null) {
-			dataPedido = LocalDate.now();
+			dataPedido = LocalDateTime.now();
 		}
 	}
 
@@ -72,11 +72,11 @@ public class Pedido {
 		this.status = status;
 	}
 
-	public LocalDate getDataPedido() {
+	public LocalDateTime getDataPedido() {
 		return dataPedido;
 	}
 
-	public void setDataPedido(LocalDate dataPedido) {
+	public void setDataPedido(LocalDateTime dataPedido) {
 		this.dataPedido = dataPedido;
 	}
 

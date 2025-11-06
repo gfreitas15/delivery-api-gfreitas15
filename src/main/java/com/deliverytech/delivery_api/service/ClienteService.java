@@ -30,7 +30,7 @@ public class ClienteService {
 	}
 
 	public List<Cliente> listarAtivos() {
-		return clienteRepository.findAtivos();
+		return clienteRepository.findByAtivoTrue();
 	}
 
 	public Cliente buscarPorId(Long id) {

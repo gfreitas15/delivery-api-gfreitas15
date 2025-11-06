@@ -37,6 +37,7 @@ public class RestauranteService {
 		existente.setNome(dados.getNome());
 		existente.setCategoria(dados.getCategoria());
 		existente.setAvaliacao(dados.getAvaliacao());
+		existente.setTaxaEntrega(dados.getTaxaEntrega());
 		return restauranteRepository.save(existente);
 	}
 
@@ -63,8 +64,16 @@ public class RestauranteService {
 	}
 
 	public List<Restaurante> topAvaliacao(int limit) {
-		if (limit <= 0) return restauranteRepository.findAllOrderByAvaliacao();
-		return restauranteRepository.findTop10ByOrderByAvaliacaoDesc();
+		List<Restaurante> todos = restauranteRepository.findAll();
+		return todos.stream()
+			.sorted((a, b) -> {
+				if (a.getAvaliacao() == null && b.getAvaliacao() == null) return 0;
+				if (a.getAvaliacao() == null) return 1;
+				if (b.getAvaliacao() == null) return -1;
+				return b.getAvaliacao().compareTo(a.getAvaliacao());
+			})
+			.limit(limit > 0 ? limit : todos.size())
+			.toList();
 	}
 
 	@Transactional
