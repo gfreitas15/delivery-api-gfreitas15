@@ -1,0 +1,792 @@
+{
+	"info": {
+		"_postman_id": "delivery-api-collection",
+		"name": "Delivery Tech API",
+		"description": "Collection completa da API REST de Delivery Tech com todos os endpoints documentados",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health & Info",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["health"]
+						}
+					}
+				},
+				{
+					"name": "App Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/info",
+							"host": ["{{baseUrl}}"],
+							"path": ["info"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Restaurantes",
+			"item": [
+				{
+					"name": "Cadastrar Restaurante",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has success\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});",
+									"",
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"restauranteId\", jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Pizza Express\",\n    \"categoria\": \"Pizza\",\n    \"endereco\": \"Rua das Flores, 123\",\n    \"cep\": \"01310-100\",\n    \"taxaEntrega\": 5.00,\n    \"tempoEntrega\": \"30-45 min\",\n    \"avaliacao\": 4.5,\n    \"ativo\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes"]
+						}
+					}
+				},
+				{
+					"name": "Listar Restaurantes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes?categoria=Pizza&ativo=true&page=0&size=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes"],
+							"query": [
+								{
+									"key": "categoria",
+									"value": "Pizza"
+								},
+								{
+									"key": "ativo",
+									"value": "true"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Buscar Restaurante por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/{{restauranteId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "{{restauranteId}}"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Restaurante",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Pizza Express Atualizado\",\n    \"categoria\": \"Pizza\",\n    \"endereco\": \"Rua das Flores, 123\",\n    \"cep\": \"01310-100\",\n    \"taxaEntrega\": 6.00,\n    \"tempoEntrega\": \"30-45 min\",\n    \"avaliacao\": 4.5,\n    \"ativo\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/{{restauranteId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "{{restauranteId}}"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Status Restaurante",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/{{restauranteId}}/status?ativo=false",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "{{restauranteId}}", "status"],
+							"query": [
+								{
+									"key": "ativo",
+									"value": "false"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Buscar por Categoria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/categoria/Pizza",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "categoria", "Pizza"]
+						}
+					}
+				},
+				{
+					"name": "Calcular Taxa de Entrega",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/{{restauranteId}}/taxa-entrega/01310-100",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "{{restauranteId}}", "taxa-entrega", "01310-100"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Restaurantes Próximos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/proximos/01310-100",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "proximos", "01310-100"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "Cadastrar Produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"produtoId\", jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Pizza Margherita\",\n    \"descricao\": \"Pizza com molho de tomate, mussarela e manjericão\",\n    \"preco\": 35.90,\n    \"categoria\": \"Pizza\",\n    \"restauranteId\": {{restauranteId}},\n    \"disponivel\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Produto por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos/{{produtoId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos", "{{produtoId}}"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Produto",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Pizza Margherita Atualizada\",\n    \"descricao\": \"Pizza atualizada\",\n    \"preco\": 40.00,\n    \"categoria\": \"Pizza\",\n    \"restauranteId\": {{restauranteId}},\n    \"disponivel\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos/{{produtoId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos", "{{produtoId}}"]
+						}
+					}
+				},
+				{
+					"name": "Remover Produto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos/{{produtoId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos", "{{produtoId}}"]
+						}
+					}
+				},
+				{
+					"name": "Toggle Disponibilidade",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos/{{produtoId}}/disponibilidade",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos", "{{produtoId}}", "disponibilidade"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Produtos do Restaurante",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/{{restauranteId}}/produtos?disponivel=true",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "{{restauranteId}}", "produtos"],
+							"query": [
+								{
+									"key": "disponivel",
+									"value": "true"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Buscar por Categoria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos/categoria/Pizza",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos", "categoria", "Pizza"]
+						}
+					}
+				},
+				{
+					"name": "Buscar por Nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos/buscar?nome=Pizza",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos", "buscar"],
+							"query": [
+								{
+									"key": "nome",
+									"value": "Pizza"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "Criar Pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"pedidoId\", jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"clienteId\": {{clienteId}},\n    \"restauranteId\": {{restauranteId}},\n    \"enderecoEntrega\": \"Rua A, 123\",\n    \"itens\": [\n        {\n            \"produtoId\": {{produtoId}},\n            \"quantidade\": 2\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/pedidos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Pedido por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pedidos", "{{pedidoId}}"]
+						}
+					}
+				},
+				{
+					"name": "Listar Pedidos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/pedidos?status=PENDENTE&page=0&size=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pedidos"],
+							"query": [
+								{
+									"key": "status",
+									"value": "PENDENTE"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Status do Pedido",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/status?status=CONFIRMADO",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pedidos", "{{pedidoId}}", "status"],
+							"query": [
+								{
+									"key": "status",
+									"value": "CONFIRMADO"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Cancelar Pedido",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pedidos", "{{pedidoId}}"]
+						}
+					}
+				},
+				{
+					"name": "Histórico do Cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clientes/{{clienteId}}/pedidos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "clientes", "{{clienteId}}", "pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Pedidos do Restaurante",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/{{restauranteId}}/pedidos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "{{restauranteId}}", "pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Calcular Total do Pedido",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"restauranteId\": {{restauranteId}},\n    \"itens\": [\n        {\n            \"produtoId\": {{produtoId}},\n            \"quantidade\": 2\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/pedidos/calcular",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pedidos", "calcular"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Relatórios",
+			"item": [
+				{
+					"name": "Vendas por Restaurante",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/relatorios/vendas-por-restaurante?dataInicio=2024-01-01T00:00:00&dataFim=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "relatorios", "vendas-por-restaurante"],
+							"query": [
+								{
+									"key": "dataInicio",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "dataFim",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Produtos Mais Vendidos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/relatorios/produtos-mais-vendidos?limite=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "relatorios", "produtos-mais-vendidos"],
+							"query": [
+								{
+									"key": "limite",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Clientes Mais Ativos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/relatorios/clientes-ativos?limite=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "relatorios", "clientes-ativos"],
+							"query": [
+								{
+									"key": "limite",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Pedidos por Período",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/relatorios/pedidos-por-periodo?dataInicio=2024-01-01T00:00:00&dataFim=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "relatorios", "pedidos-por-periodo"],
+							"query": [
+								{
+									"key": "dataInicio",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "dataFim",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Testes de Validação",
+			"item": [
+				{
+					"name": "Restaurante - Nome Vazio",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"\",\n    \"categoria\": \"Pizza\",\n    \"endereco\": \"Rua das Flores, 123\",\n    \"taxaEntrega\": 5.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes"]
+						}
+					}
+				},
+				{
+					"name": "Produto - Preço Negativo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Pizza Teste\",\n    \"preco\": -10.00,\n    \"categoria\": \"Pizza\",\n    \"restauranteId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos"]
+						}
+					}
+				},
+				{
+					"name": "Produto - Preço Acima do Máximo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Pizza Teste\",\n    \"preco\": 600.00,\n    \"categoria\": \"Pizza\",\n    \"restauranteId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/produtos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "produtos"]
+						}
+					}
+				},
+				{
+					"name": "Pedido - Sem Itens",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"clienteId\": 1,\n    \"restauranteId\": 1,\n    \"enderecoEntrega\": \"Rua A, 123\",\n    \"itens\": []\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/pedidos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Restaurante - Categoria Inválida",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Restaurante Teste\",\n    \"categoria\": \"Categoria Inexistente\",\n    \"endereco\": \"Rua das Flores, 123\",\n    \"taxaEntrega\": 5.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes"]
+						}
+					}
+				},
+				{
+					"name": "Restaurante - CEP Inválido",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Restaurante Teste\",\n    \"categoria\": \"Pizza\",\n    \"endereco\": \"Rua das Flores, 123\",\n    \"cep\": \"12345\",\n    \"taxaEntrega\": 5.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Restaurante Inexistente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/restaurantes/999",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "restaurantes", "999"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "restauranteId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "produtoId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "clienteId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "pedidoId",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
+
